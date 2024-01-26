@@ -15,22 +15,21 @@ MQTT_TOPIC="#"
 mosquitto_sub --cafile $CA_FILE --cert $CERT_FILE --key $KEY_FILE -h $MQTT_HOST -p $MQTT_PORT -k 30 -t $MQTT_TOPIC | 
 while IFS= read -r line; do
     # Extract the relevant data from MQTT message
-    echo "got message"
-    echo "Content of \$line: $line"
-    sanitized_line=$(echo $line | tr -cd '[:print:]')
-    echo "Content of \$sanitized_line: $sanitized_line"
 
-    devEui=$(echo '$sanitized_line' | jq -r '.devEui')
+    sanitized_line=$(echo $line | tr -cd '[:print:]')
+
+    echo "$sanitized_line" > tmp.json
+    devEui=$(jq -r '.devEui' tmp.json)
+
+    devEui=$(jq -r '.devEui' tmp.json)
     timestamp=$(date +%s)
     
     # Loop through the keys in the "object" field
-    keys=$(echo '$sanitized_line' | jq -r '.object | keys_unsorted[]')
-    echo "$keys"
+    keys=$(jq -r '.object | keys_unsorted[]' tmp.json)
 
     # Create and save JSON files for each key
     for key in $keys; do
-        value=$(echo '$sanitized_line' | jq -r ".object[\"$key\"]")
-        echo "$key: $value"
+        value=$(jq -r ".object[\"$key\"]" tmp.json)
 
         # Create JSON content
         json_content="{\"$key\": \"$value\", \"timestamp\": \"$timestamp\"}"
@@ -38,4 +37,5 @@ while IFS= read -r line; do
         # Save to a file
         echo "$json_content" > "$OUTPUT_DIR/$devEui-$key.json"
     done
+    rm tmp.json
 done

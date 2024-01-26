@@ -16,7 +16,7 @@ services:
     volumes:
       - ./output:/usr/local/apache2/htdocs  # Mount the output directory
     ports:
-      - "5020:80"
+      - "5055:80"
     networks:
       - my_network
 

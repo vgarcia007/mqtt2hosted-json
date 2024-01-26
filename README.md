@@ -2,11 +2,10 @@
 
 ## config
 
-mqtt2json.sh:
-
-MQTT_HOST="<host>"
-MQTT_PORT=<port>
-MQTT_TOPIC="<topic>"
+### mqtt2json.sh:
+- MQTT_HOST="<host>"
+- MQTT_PORT=<port>
+- MQTT_TOPIC="<topic>"
 
 ## put certs in certs dir
 - ca.crt
