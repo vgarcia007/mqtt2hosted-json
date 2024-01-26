@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  mqtt-script:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./certs:/app/certs  # Mount your cert and key files
+      - ./output:/app/output  # Mount the output directory
+    depends_on:
+      - mysql
+    networks:
+      - my_network
+
+  apache:
+    image: httpd:latest
+    volumes:
+      - ./output:/usr/local/apache2/htdocs  # Mount the output directory
+    ports:
+      - "80:80"
+    networks:
+      - my_network
+
+networks:
+  my_network:
