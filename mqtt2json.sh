@@ -38,7 +38,7 @@ while IFS= read -r line; do
         # Create JSON content with proper type
         case $type in
             "number" | "boolean" | "null")
-                json_content="{\"$key\": $value, \"timestamp\": \"$timestamp\"}"
+                json_content="{\"$key\": $value, \"timestamp\": $timestamp}"
                 ;;
             *)
                 # If the type is not recognized, treat it as a string
