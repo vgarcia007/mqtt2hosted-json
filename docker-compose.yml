@@ -7,9 +7,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./certs:/app/certs  # Mount your cert and key files
-      - ./output:/app/output  # Mount the output directory
-    depends_on:
-      - mysql
+      - ./output:/app/output:z  # Mount the output directory
     networks:
       - my_network
 
@@ -18,7 +16,7 @@ services:
     volumes:
       - ./output:/usr/local/apache2/htdocs  # Mount the output directory
     ports:
-      - "80:80"
+      - "5020:80"
     networks:
       - my_network
 
