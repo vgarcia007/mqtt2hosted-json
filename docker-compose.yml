@@ -2,9 +2,9 @@ version: '3'
 
 services:
   mqtt-script:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    container_name: mqtt-script
+    restart: always
+    image: mqtt-script
     volumes:
       - ./certs:/app/certs  # Mount your cert and key files
       - ./output:/app/output:z  # Mount the output directory
@@ -12,6 +12,8 @@ services:
       - my_network
 
   apache:
+    container_name: mqtt-script-apache
+    restart: always
     image: httpd:latest
     volumes:
       - ./output:/usr/local/apache2/htdocs  # Mount the output directory

@@ -1,4 +1,6 @@
+.vscode
+*.json
 *.crt
 *.csr
 *.key
-.vscode
+*.conf

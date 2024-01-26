@@ -13,7 +13,9 @@ WORKDIR /app
 RUN mkdir output
 
 # Copy the .htaccess file into the container
-#COPY output/.htaccess /app/output/.htaccess
+#COPY certs/client.crt /app/certs/client.crt
+#COPY certs/client.csr /app/certs/client.csr
+#COPY certs/client.key /app/certs/client.key
 
 # Copy the script into the container
 COPY mqtt2json.sh /app/mqtt2json.sh

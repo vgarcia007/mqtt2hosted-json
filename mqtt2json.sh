@@ -31,8 +31,20 @@ while IFS= read -r line; do
     for key in $keys; do
         value=$(jq -r ".object[\"$key\"]" tmp.json)
 
-        # Create JSON content
-        json_content="{\"$key\": \"$value\", \"timestamp\": \"$timestamp\"}"
+        # Determine the type of the value
+        type=$(echo "$value" | jq -r type)
+
+
+        # Create JSON content with proper type
+        case $type in
+            "number" | "boolean" | "null")
+                json_content="{\"$key\": $value, \"timestamp\": \"$timestamp\"}"
+                ;;
+            *)
+                # If the type is not recognized, treat it as a string
+                json_content="{\"$key\": \"$value\", \"timestamp\": $timestamp}"
+                ;;
+        esac
 
         # Save to a file
         echo "$json_content" > "$OUTPUT_DIR/$devEui-$key.json"
