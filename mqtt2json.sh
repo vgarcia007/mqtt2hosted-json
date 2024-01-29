@@ -15,12 +15,11 @@ MQTT_TOPIC="#"
 mosquitto_sub --cafile $CA_FILE --cert $CERT_FILE --key $KEY_FILE -h $MQTT_HOST -p $MQTT_PORT -k 30 -t $MQTT_TOPIC | 
 while IFS= read -r line; do
     # Extract the relevant data from MQTT message
-
     sanitized_line=$(echo $line | tr -cd '[:print:]')
 
+    # Write an read contents to a temp file
+    # This is to work around problems with quotation marks in JSON
     echo "$sanitized_line" > tmp.json
-    devEui=$(jq -r '.devEui' tmp.json)
-
     devEui=$(jq -r '.devEui' tmp.json)
     timestamp=$(date +%s)
     
@@ -49,5 +48,7 @@ while IFS= read -r line; do
         # Save to a file
         echo "$json_content" > "$OUTPUT_DIR/$devEui-$key.json"
     done
+    
+    # Delete the temp file
     rm tmp.json
 done
